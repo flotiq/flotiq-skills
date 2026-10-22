@@ -2,32 +2,38 @@
 
 ## Fetching
 
-* Use the SDK's typed list/get methods against the generated types produced by `flotiq-typegen` — don't construct raw query strings or endpoints by hand when the SDK exposes a typed method for it.
-* Filter and paginate through the SDK's supported query options rather than over-fetching and filtering client-side.
-* By default, only fetch published content for public-facing pages; fetching drafts is a deliberate choice tied to preview/draft mode, not the default path.
+* Use the SDK's typed list/get methods against the generated types (`flotiq-typegen`) — don't construct raw query strings or endpoints by hand.
+  ```ts
+  const { data } = await flotiqApiClient.content.<ctd>.list({ hydrate: 1, limit: 10, filters: { slug: { type: "equals", filter: slug } } });
+  const one = await flotiqApiClient.content.<ctd>.get(id, { hydrate: 1 });
+  ```
+* Filter and paginate through the SDK's query options rather than over-fetching and filtering client-side. Relation filters: [`writing.md`](writing.md#filtering-by-a-relation).
+* Public pages fetch published content only; drafts are a deliberate choice tied to draft mode.
 
 ## Draft & Public
 
-Draft & Public is a per-Content-Type setting in Flotiq that enables a two-state publish workflow (draft → public). Its effect on the SDK layer:
+Draft & Public is a per-Content-Type setting that enables a two-state publish workflow (draft → public):
 
-* When **disabled** (default), objects are live immediately on create/update — there's no draft state to filter on.
-* When **enabled**, the SDK returns only published objects by default. To include drafts (e.g. for preview/draft mode), pass the appropriate draft parameter per the SDK docs — this should only happen inside an authenticated draft mode context, never on public-facing routes.
-* If content is published in Flotiq but not appearing in the app, check whether Draft & Public is enabled and the object was explicitly published (not just saved). Use `get_object` via MCP or the panel to confirm publish state.
-
-For Next.js draft mode integration, see [`nextjs-integration.md`](nextjs-integration.md).
+* **Disabled** (default): objects are live immediately on create/update — there's no draft state.
+* **Enabled**: public reads return only published objects. Drafts are read only inside an authenticated draft-mode context, never on public routes. In Next.js, `@flotiq/nextjs-addon`'s middleware switches this for you ([`nextjs-integration.md`](nextjs-integration.md)).
+* Content published in Flotiq but missing in the app: check whether Draft & Public is on and the object was actually published, not just saved (MCP `get_object` or the panel shows its state), and whether a cache is still serving the old response.
 
 ## Hydrated relations
 
-* A "hydrated" relation returns the related object's data inline instead of just an ID/reference — request this whenever the UI renders data from the related object (an author's name on a post listing, a category's label on a product card).
-* Only hydrate relations you actually render. Requesting hydration for unused relations bloats the response for no benefit.
-* If a relation isn't hydrated and the UI needs its data, that's a bug to fix at the fetch call (request hydration), not by issuing a second manual fetch per object.
+* A hydrated relation returns the related object's data inline instead of a `{ dataUrl, type }` link — request it whenever the UI renders data from the related object (an author's name on a post card). `hydrate: 2` goes two levels deep (a page → its sections → their relations).
+* Only hydrate what you render; unused hydration bloats the response.
+* A relation the UI needs but didn't hydrate is a bug at the fetch call, not a reason for a second fetch per object.
 
 ## Caching and revalidation
 
-* Pick a strategy per content type based on how often it changes:
-  * **Rarely-changing content** (marketing pages, settings): cache aggressively, revalidate on webhook/publish events.
-  * **Frequently-changing content** (a live listing, real-time data): shorter cache windows or no caching.
-* If the app uses static generation, wire revalidation through Flotiq's webhook-triggered revalidation rather than relying solely on a fixed time interval — otherwise published edits won't appear until the next scheduled rebuild.
-* Document the chosen strategy near the fetch code (which cache, what invalidates it) so it's clear why a given content type behaves the way it does.
+If the project already has a strategy, keep it. A route-level `revalidate`, `dynamic = "force-dynamic"` or a fetch `cache` option overrides the client's caching for the whole page — and either hides edits or throws the cache away.
 
-See [Flotiq Documentation](https://flotiq.com/docs/) for exact SDK method signatures and query options, and the `flotiq-nextjs-setup` output for a working revalidation example.
+Without one, choose deliberately:
+
+* **Next.js:** `@flotiq/nextjs-addon`'s middleware on the shared client — responses tagged `flotiq-content` and `flotiq-content-<ctd>`, cached for a set time, invalidated by a Flotiq webhook calling the revalidate route on every change ([`nextjs-integration.md`](nextjs-integration.md#revalidation)). Previews or staging that the webhook doesn't reach should not cache (`revalidateTime: 0`), or they never see edits.
+* **Rarely-changing content** (marketing pages, settings): cache long, invalidate on webhook.
+* **Frequently-changing content** (live listings): short windows or no cache.
+
+Write the chosen strategy next to the client (which cache, what invalidates it), so the next person doesn't add a second one.
+
+The full option list is in the SDK README (`node_modules/@flotiq/flotiq-api-sdk/README.md`).

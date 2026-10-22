@@ -1,11 +1,11 @@
 ---
 name: flotiq-typegen
-description: Use when TypeScript types for Flotiq content need to be generated or refreshed after a Content Type change, via `npm exec flotiq-api-typegen`. Not for schema design (see flotiq-schema) or SDK/fetch code (see flotiq-sdk).
+description: Use when TypeScript types for Flotiq content need to be generated or refreshed after a Content Type change — `flotiq-api-typegen` (often `npm run typegen`) writes `flotiq-api.d.ts`. Not for schema design (see flotiq-schema) or SDK/fetch code (see flotiq-sdk).
 ---
 
 # Flotiq Typegen
 
-Generate and maintain TypeScript definitions for Flotiq content. Three rules — kept deliberately small. Not for schema design (`flotiq-schema`) or fetch/render code (`flotiq-sdk`).
+Generate and maintain the TypeScript definitions for Flotiq content in `flotiq-api.d.ts`. Three rules — kept deliberately small. Not for schema design (`flotiq-schema`) or fetch/render code (`flotiq-sdk`).
 
 ## When to use
 
@@ -13,29 +13,29 @@ After any Content Type is created or changed, before code depends on the new sha
 
 ## Workflow
 
-1. Run `npm exec flotiq-api-typegen` from the project root (`--watch` while actively iterating on a schema).
-2. Never hand-edit the output — if a generated type looks wrong, fix the CTD (`flotiq-schema`) and regenerate.
-3. Commit the generated types by default, so builds don't need a live Flotiq connection. Only gitignore them if CI is set up to run typegen before build.
+1. Run the project's typegen script if it has one (`npm run typegen`); otherwise `npx flotiq-api-typegen` (the bin ships with `@flotiq/flotiq-api-sdk`). It reads the live schema of the space of `FLOTIQ_API_KEY` (from the environment or `.env`; a read-only key is enough) and writes `flotiq-api.d.ts` in the project root. Without the key it fails: say so instead of writing types by hand.
+2. Never hand-edit the output — if a generated type looks wrong, fix the CTD (`flotiq-schema`) and regenerate. Keep `flotiq-api.d.ts` out of lint (e.g. ESLint `globalIgnores`), so its style never needs fixing or suppressing.
+3. Commit the generated file with the change, so builds don't need a live Flotiq connection.
+
+Tools that create content types for you (the section library's `add`, an environment's own tool) usually regenerate the types themselves; run typegen after your own schema changes.
 
 ## Common mistakes
 
 * Forgetting to regenerate after a schema change, so code compiles against a stale shape.
 * Hand-editing the generated file, or hand-writing a parallel interface instead of trusting it.
-* Gitignoring generated types without CI actually regenerating them before build.
+* Gitignoring the generated file without CI regenerating it before build.
 
 ## Completion checklist
 
-* [ ] `FLOTIQ_API_KEY` is set in the environment before running typegen.
-* [ ] `npm exec flotiq-api-typegen` ran successfully after the most recent schema change.
+* [ ] Typegen ran successfully after the most recent schema change.
 * [ ] The generated file has not been hand-edited.
-* [ ] Generated types are committed (or CI is confirmed to regenerate them before build).
+* [ ] It is committed (or CI is confirmed to regenerate it before build).
 * [ ] No duplicate handwritten interfaces exist alongside the generated types.
 
 ## References
 
-* [`references/typegen-workflow.md`](references/typegen-workflow.md) — command reference and the commit-vs-gitignore tradeoff.
+* [`references/typegen-workflow.md`](references/typegen-workflow.md) — options, when to regenerate, the commit-vs-gitignore tradeoff.
 
 ## Official documentation
 
-* Type generation: `npm exec flotiq-api-typegen`
 * [Flotiq SDK for Node.js/TypeScript](https://flotiq.com/docs/API/generate-package/sdk-nodejs/)

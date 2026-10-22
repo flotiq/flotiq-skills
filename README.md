@@ -11,8 +11,10 @@ Inspired by the architecture and philosophy of the [WordPress Agent Skills](http
 This repository is in Proof of concept state.
 
 See next steps:
-* [ ] Adjust catalog of flotiq skills
+* [x] Adjust catalog of flotiq skills (0.5.0: `flotiq-sections`, Flotiq MCP schema tools, SDK gotchas)
 * [ ] Use https://www.skills.sh to manage skills
+* [ ] Publish `@flotiq/flotiq-flowbite-next` on npm, then remove every `<!-- private-registry -->` block (see [Private registry](#private-registry))
+* [ ] Once `@flotiq/flotiq-flowbite-next` ships its setup skill with the 1.1 paths (`page-render`), remove the `<!-- setup-skill-paths -->` block in `flotiq-sections`
 
 ## Why Agent Skills
 
@@ -41,7 +43,7 @@ flotiq-agent-skills/
     ├── flotiq-sdk/        # Build applications on the official SDK
     │   ├── SKILL.md
     │   └── references/
-    ├── flotiq-ui-sections/ # Render Flowbite sections in Flotiq pages
+    ├── flotiq-sections/   # Build websites from Flotiq sections
     │   ├── SKILL.md
     │   └── references/
     ├── flotiq-typegen/    # Generate and maintain TypeScript types
@@ -102,6 +104,23 @@ See the [Skills CLI supported-agent list](https://github.com/vercel-labs/skills#
 
 Copy any skill folder from `skills/` directly into your AI assistant's skills directory.
 
+### Upgrading from 0.4
+
+`flotiq-ui-sections` was replaced by `flotiq-sections` (the section library 1.x is a CLI over a shadcn registry; `SectionRender` is no longer imported from the package). Remove the old skill and add the new one:
+
+```sh
+npx skills remove flotiq-ui-sections
+npx skills add flotiq/flotiq-skills --skill flotiq-sections
+```
+
+### Using with a project starter
+
+The skills are generic: they find the project's client, scripts and routes instead of assuming paths. A starter or project keeps its specifics — file paths, its caching policy, which commands to run, who does the Flotiq work — in its own `AGENTS.md`/`CLAUDE.md`, which take precedence over the skills. Don't fork the skills into the project; update them from here. Examples: the Flotiq Next.js starter (`AGENTS.md`) and the [plain-JS plugin template](https://github.com/flotiq/flotiq-ui-plugin-templates-plain-js) (`.github/copilot-instructions.md`).
+
+### Private registry
+
+`@flotiq/flotiq-flowbite-next` (used by `flotiq-sections`) is temporarily in a private GitLab registry. Everything about that registry is wrapped in `<!-- private-registry -->` … `<!-- /private-registry -->` blocks. Once the package is on npm, delete those blocks (and this section) — nothing else needs to change.
+
 ## Available skills
 
 | Skill | Answers |
@@ -109,7 +128,7 @@ Copy any skill folder from `skills/` directly into your AI assistant's skills di
 | [`flotiq-schema`](skills/flotiq-schema/SKILL.md) | How should I design or evolve this Content Type? |
 | [`flotiq-content`](skills/flotiq-content/SKILL.md) | How do I populate this project with good content? |
 | [`flotiq-sdk`](skills/flotiq-sdk/SKILL.md) | How do I build an app on top of Flotiq content? |
-| [`flotiq-ui-sections`](skills/flotiq-ui-sections/SKILL.md) | How do I render or customize Flotiq page sections? |
+| [`flotiq-sections`](skills/flotiq-sections/SKILL.md) | How do I build a website from Flotiq sections (library or my own)? |
 | [`flotiq-typegen`](skills/flotiq-typegen/SKILL.md) | How do I generate and maintain TypeScript types? |
 | [`flotiq-plugins`](skills/flotiq-plugins/SKILL.md) | How do I build, configure, or publish a Flotiq UI plugin? |
 
@@ -117,8 +136,7 @@ Copy any skill folder from `skills/` directly into your AI assistant's skills di
 
 The structure is deliberately flat and additive — a new skill is a new folder under `skills/` with its own `SKILL.md` and `references/`. Nothing about the existing skills needs to change to add:
 
-* `flotiq-webhooks` — reacting to content changes
-* `flotiq-nextjs` — Next.js-specific integration patterns built on `flotiq-sdk`
+* `flotiq-webhooks` — reacting to content changes beyond Next.js revalidation (covered in `flotiq-sdk`)
 * `flotiq-media` — deeper media library / asset transformation workflows
 * `flotiq-ai` — AI-assisted content generation workflows
 
@@ -127,6 +145,6 @@ When proposing a new skill, keep it answering exactly one question, and check wh
 ## Official documentation
 
 * [Flotiq Documentation](https://flotiq.com/docs/)
-* [Flotiq MCP Server](https://mcp.flotiq.com/mcp)
+* [Flotiq MCP Server](https://mcp.flotiq.com/mcp) — content types and content objects (API key or OAuth)
 * [Next.js integration](https://flotiq.com/docs/Universe/nextjs/nextjs-setup)
-* Type generation: `npm exec flotiq-api-typegen`
+* Type generation: `npx flotiq-api-typegen` (ships with `@flotiq/flotiq-api-sdk`)

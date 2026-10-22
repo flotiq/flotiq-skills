@@ -4,9 +4,9 @@
 
 * Relation fields describe a link from one Content Type to another. In the underlying schema, a relation is always an array — even when only one related object is allowed — so cardinality is controlled by the field's multiplicity setting, not the schema shape.
 * **Model a relation when data is shared, reused, or has its own lifecycle** (an author edited independently of any one post, a category that exists before and after any given product). Model a **plain field** only when the value is genuinely intrinsic to that one object and never reused.
-* Prefer a small number of reusable related types (`Author`, `Category`, `Tag`, `SEO`) over letting every content type grow its own copy of the same concept.
+* Prefer a small number of reusable related types (`author`, `category`, `tag`, `seo`) over letting every content type grow its own copy of the same concept.
 * When designing a relation, decide explicitly:
-  * **Direction** — which type "owns" the relation field (usually the many side points at the one side, e.g. `BlogPost.author → Author`).
+  * **Direction** — which type "owns" the relation field (usually the many side points at the one side, e.g. `blog_post.author → author`).
   * **Cardinality** — single related object vs. multiple (a post has one author but many tags).
   * **Required or optional** — can the object be saved without this relation set?
 * Avoid circular required relations (A requires B which requires A) — they make it impossible to create the first object of either type.
