@@ -6,6 +6,8 @@ This repository does **not** re-publish the [Flotiq documentation](https://floti
 
 Inspired by the architecture and philosophy of the [WordPress Agent Skills](https://github.com/WordPress/agent-skills) project.
 
+> **AI-generated content.** These skills were written with AI assistance and reviewed by the Flotiq team. They can still contain mistakes or fall behind the current API — when a skill and the [Flotiq documentation](https://flotiq.com/docs/) disagree, the documentation wins. Please report problems in [issues](https://github.com/flotiq/flotiq-skills/issues).
+
 ## Work in progress
 
 This repository is in Proof of concept state.
