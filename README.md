@@ -8,16 +8,6 @@ Inspired by the architecture and philosophy of the [WordPress Agent Skills](http
 
 > **AI-generated content.** These skills were written with AI assistance and reviewed by the Flotiq team. They can still contain mistakes or fall behind the current API — when a skill and the [Flotiq documentation](https://flotiq.com/docs/) disagree, the documentation wins. Please report problems in [issues](https://github.com/flotiq/flotiq-skills/issues).
 
-## Work in progress
-
-This repository is in Proof of concept state.
-
-See next steps:
-* [x] Adjust catalog of flotiq skills (0.5.0: `flotiq-sections`, Flotiq MCP schema tools, SDK gotchas)
-* [ ] Use https://www.skills.sh to manage skills
-* [ ] Publish `@flotiq/flotiq-flowbite-next` on npm, then remove every `<!-- private-registry -->` block (see [Private registry](#private-registry))
-* [ ] Once `@flotiq/flotiq-flowbite-next` ships its setup skill with the 1.1 paths (`page-render`), remove the `<!-- setup-skill-paths -->` block in `flotiq-sections`
-
 ## Why Agent Skills
 
 AI coding assistants are capable, but without project-specific guidance they tend to:
@@ -106,19 +96,6 @@ See the [Skills CLI supported-agent list](https://github.com/vercel-labs/skills#
 
 Copy any skill folder from `skills/` directly into your AI assistant's skills directory.
 
-### Upgrading from 0.4
-
-`flotiq-ui-sections` was replaced by `flotiq-sections` (the section library 1.x is a CLI over a shadcn registry; `SectionRender` is no longer imported from the package). Remove the old skill and add the new one:
-
-```sh
-npx skills remove flotiq-ui-sections
-npx skills add flotiq/flotiq-skills --skill flotiq-sections
-```
-
-### Using with a project starter
-
-The skills are generic: they find the project's client, scripts and routes instead of assuming paths. A starter or project keeps its specifics — file paths, its caching policy, which commands to run, who does the Flotiq work — in its own `AGENTS.md`/`CLAUDE.md`, which take precedence over the skills. Don't fork the skills into the project; update them from here. Examples: the Flotiq Next.js starter (`AGENTS.md`) and the [plain-JS plugin template](https://github.com/flotiq/flotiq-ui-plugin-templates-plain-js) (`.github/copilot-instructions.md`).
-
 ### Private registry
 
 `@flotiq/flotiq-flowbite-next` (used by `flotiq-sections`) is temporarily in a private GitLab registry. Everything about that registry is wrapped in `<!-- private-registry -->` … `<!-- /private-registry -->` blocks. Once the package is on npm, delete those blocks (and this section) — nothing else needs to change.
@@ -143,6 +120,10 @@ The structure is deliberately flat and additive — a new skill is a new folder 
 * `flotiq-ai` — AI-assisted content generation workflows
 
 When proposing a new skill, keep it answering exactly one question, and check whether the knowledge it needs already belongs to an existing skill before duplicating it.
+
+## Next steps
+
+* [ ] Publish `@flotiq/flotiq-flowbite-next` on npm, then remove every `<!-- private-registry -->` block (see [Private registry](#private-registry))
 
 ## Official documentation
 

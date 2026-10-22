@@ -53,11 +53,7 @@ npx -p @flotiq/flotiq-flowbite-next flotiq-flowbite add hero features footer --y
 
 ## First setup
 
-If the project has the library's setup skill (`.github/skills/flotiq-flowbite-setup/SKILL.md`; in an app with `src/`, `init` puts it in `src/.github/skills/`), read that file and follow it for the first setup (agents that load skills from `.claude/skills/` won't find it on their own): it is interactive and walks the user through `flotiq-nextjs-setup` and Content Preview.
-
-<!-- setup-skill-paths -->
-> In library versions up to 1.1.3 that file imports `PageRenderer` from `@/rendering/PageRenderer`, which doesn't exist: the renderer is `@/rendering/page-render`, default export `PageRender`.
-<!-- /setup-skill-paths -->
+If the project has the library's setup skill (`.github/skills/flotiq-flowbite-setup/SKILL.md`), read that file and follow it for the first setup (agents that load skills from `.claude/skills/` won't find it on their own): it is interactive and walks the user through `flotiq-nextjs-setup` and Content Preview.
 
 Otherwise, after `init`:
 
