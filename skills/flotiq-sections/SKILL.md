@@ -1,6 +1,6 @@
 ---
 name: flotiq-sections
-description: Use when a website's pages are built from sections whose content lives in Flotiq — landing pages, company sites, product and service pages, marketing or campaign pages, "about us" and contact pages (navbar, hero, features, FAQ, team, testimonials, contact, footer…), including a site made from a design. Covers the section library's CLI (`@flotiq/flotiq-flowbite-next`), the content types and content, custom sections, and the routes, components and styles in a Next.js app. Not for app-like UIs or lists of entities (see flotiq-schema, flotiq-sdk).
+description: Use when a website's pages are built from sections whose content lives in Flotiq — landing pages, company sites, product and service pages, marketing or campaign pages, "about us" and contact pages (navbar, hero, features, FAQ, team, testimonials, contact, footer…), including a site made from a design. Covers the section library's CLI (`@flotiq/flotiq-sections-next`), the content types and content, custom sections, and the routes, components and styles in a Next.js app. Not for app-like UIs or lists of entities (see flotiq-schema, flotiq-sdk).
 ---
 
 # Flotiq sections
@@ -23,29 +23,18 @@ Don't use them for **an app's own UI** (a quiz, a calculator, a dashboard, a for
 
 ## The section library's CLI
 
-The library is `@flotiq/flotiq-flowbite-next` (1.1+): a CLI over a shadcn registry. It ships source files and content type definitions, not importable components — there is no `SectionRender` to import from the package.
-
-<!-- private-registry -->
-> **Private registry (temporary).** Until the package is published on npm, it lives in the cdwv GitLab registry. A user-level `~/.npmrc` (never the repo's) needs:
->
-> ```ini
-> @flotiq:registry=https://git.cdwv.pl/api/v4/projects/1115/packages/npm/
-> //git.cdwv.pl/api/v4/projects/1115/packages/npm/:_authToken=<token with read_api, read_registry>
-> ```
->
-> Without it, `npx` answers 404 for the package: ask the user to set it up, don't look for a workaround.
-<!-- /private-registry -->
+The library is [`@flotiq/flotiq-sections-next`](https://www.npmjs.com/package/@flotiq/flotiq-sections-next) (2.0+; until 2.0 it was `@flotiq/flotiq-flowbite-next` with the `flotiq-flowbite` CLI): a CLI over a shadcn registry. It ships source files and content type definitions, not importable components — there is no `SectionRender` to import from the package.
 
 The CLI reads `FLOTIQ_API_KEY` (read-only: compares CTDs, generates types) and `FLOTIQ_RW_API_KEY` (imports CTDs into the space) from the environment or `.env`; without them it prompts interactively.
 
 ```bash
-npx -p @flotiq/flotiq-flowbite-next flotiq-flowbite init --yes --defaults   # once per app
-npx -p @flotiq/flotiq-flowbite-next flotiq-flowbite add hero features footer --yes
+npx -p @flotiq/flotiq-sections-next flotiq-sections init --yes --defaults   # once per app
+npx -p @flotiq/flotiq-sections-next flotiq-sections add hero features footer --yes
 ```
 
-(Installed as a dev dependency, the same commands are `pnpm flotiq-flowbite …` / `npx flotiq-flowbite …`.)
+(Installed as a dev dependency, the same commands are `pnpm flotiq-sections …` / `npx flotiq-sections …`.)
 
-* `init` sets up shadcn (`components.json`, its theme in the global stylesheet, a font in the root layout), the page renderer (`src/rendering/`) and the `page` type, and regenerates the types. It also copies the library's own setup skill, `flotiq-flowbite-setup`, to `.github/skills/`; pass `--no-skill` if the project doesn't want it.
+* `init` sets up shadcn (`components.json`, its theme in the global stylesheet, a font in the root layout), the page renderer (`src/rendering/`) and the `page` type, and regenerates the types. It also copies the library's own setup skill, `flotiq-sections-setup`, to `.github/skills/`; pass `--no-skill` if the project doesn't want it.
 * `add` copies the sections and the components, hooks and lib files they use, creates their content types and regenerates `flotiq-api.d.ts`. Names can be `hero` or `ff_section_hero`; `--all` adds the whole registry.
 * Inspect before changing anything: `add hero --dry-run`, `--diff` (also diffs the CTD against the space), `--view`. `--skip-typegen` skips type generation.
 * Add only sections the app doesn't have: one already in `src/sections/<name>/` is the app's code — never add it again, and never pass `--overwrite` unless the user asked to replace their version.
@@ -53,7 +42,7 @@ npx -p @flotiq/flotiq-flowbite-next flotiq-flowbite add hero features footer --y
 
 ## First setup
 
-If the project has the library's setup skill (`.github/skills/flotiq-flowbite-setup/SKILL.md`), read that file and follow it for the first setup (agents that load skills from `.claude/skills/` won't find it on their own): it is interactive and walks the user through `flotiq-nextjs-setup` and Content Preview.
+If the project has the library's setup skill (`.github/skills/flotiq-sections-setup/SKILL.md`, or `flotiq-flowbite-setup` in an app set up before 2.0), read that file and follow it for the first setup (agents that load skills from `.claude/skills/` won't find it on their own): it is interactive and walks the user through `flotiq-nextjs-setup` and Content Preview.
 
 Otherwise, after `init`:
 

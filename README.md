@@ -96,10 +96,6 @@ See the [Skills CLI supported-agent list](https://github.com/vercel-labs/skills#
 
 Copy any skill folder from `skills/` directly into your AI assistant's skills directory.
 
-### Private registry
-
-`@flotiq/flotiq-flowbite-next` (used by `flotiq-sections`) is temporarily in a private GitLab registry. Everything about that registry is wrapped in `<!-- private-registry -->` … `<!-- /private-registry -->` blocks. Once the package is on npm, delete those blocks (and this section) — nothing else needs to change.
-
 ## Available skills
 
 | Skill | Answers |
@@ -120,10 +116,6 @@ The structure is deliberately flat and additive — a new skill is a new folder 
 * `flotiq-ai` — AI-assisted content generation workflows
 
 When proposing a new skill, keep it answering exactly one question, and check whether the knowledge it needs already belongs to an existing skill before duplicating it.
-
-## Next steps
-
-* [ ] Publish `@flotiq/flotiq-flowbite-next` on npm, then remove every `<!-- private-registry -->` block (see [Private registry](#private-registry))
 
 ## Official documentation
 

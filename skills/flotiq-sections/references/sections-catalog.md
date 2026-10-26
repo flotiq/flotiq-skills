@@ -1,6 +1,6 @@
 # Sections catalog
 
-The sections of the Flotiq section library (`@flotiq/flotiq-flowbite-next` 1.1). The name is what the CLI's `add` takes; the content type is `ff_section_<name>` with `-` as `_`. Every section has a required `variant` (the first one listed is the default). `*` marks a required field.
+The sections of the Flotiq section library (`@flotiq/flotiq-sections-next` 2.0). The name is what the CLI's `add` takes; the content type is `ff_section_<name>` with `-` as `_`. Every section has a required `variant` (the first one listed is the default). `*` marks a required field.
 
 Shared field shapes:
 
