@@ -133,11 +133,14 @@ Once, after `init` (skip what's already there). Import the project's shared Flot
    ```tsx
    // src/app/[...slug]/page.tsx — next to generateMetadata
    export async function generateStaticParams() {
-     return (await getPageSlugs()).map((slug) => ({ slug: slug.split("/") }));
+     const slugs = await getPageSlugs();
+     // Cache Components need at least one result; before any page but the home page exists, a slug that isn't a page
+     if (slugs.length === 0) return [{ slug: ["not-found"] }];
+     return slugs.map((slug) => ({ slug: slug.split("/") }));
    }
    ```
 
-   Pages published later still render (on demand). A missing slug shows the not-found page, with status 200: the response is already streaming.
+   Keep the fallback: with Cache Components the build fails when `generateStaticParams` returns nothing ("must return at least one result"), which is the case in a space with no pages yet, or only the home page. Pages published later still render (on demand). A missing slug shows the not-found page, with status 200: the response is already streaming. A page read before it existed is cached as missing until the revalidate route clears the `flotiq-content` tag, so publish the pages before checking them on a production build, or call the revalidate route (Flotiq's webhook does).
 
 3. `src/app/page.tsx` — the home page from sections, when the site's home page is a section page: the same as above with `getPage("")`. An app with a home page of its own keeps it, and its section pages live under the catch-all. If the build must work without `FLOTIQ_API_KEY`, guard both routes the way the project already does.
 
@@ -167,7 +170,7 @@ Then run the project's lint, typecheck and tests.
 
 * [ ] Every page opens at its slug and shows its sections, none "not found".
 * [ ] Every field of every section type is shown by its component; no visible content is hardcoded.
-* [ ] The catch-all (and the home page, if it is a section page) uses `getPage` with `hydrate: 2` and `notFound()` for a missing page; with Cache Components, `getPage` is `"use cache"` and the catch-all has `generateStaticParams`.
+* [ ] The catch-all (and the home page, if it is a section page) uses `getPage` with `hydrate: 2` and `notFound()` for a missing page; with Cache Components, `getPage` is `"use cache"` and the catch-all has `generateStaticParams` that returns at least one result.
 * [ ] `next build` passes.
 * [ ] Stylesheet: the `dark` variant changed, the design's colors in shadcn's `:root` and `.dark` (each set once), a one-look design's in both.
 * [ ] Lint, typecheck and tests pass.
