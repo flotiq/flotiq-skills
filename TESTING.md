@@ -273,7 +273,7 @@ Legend: ✅ pass · ⚠️ partial · ❌ fail · ⏭ not run · ⏸ needs a hum
 | 2026-10-28 | Claude Code / Opus 5.5 | 4a sdk setup | ✅ | ✅ | ✅ | — | — |
 | 2026-10-28 | Claude Code / Opus 5.5 | 4b sdk read (`step`) | ✅ | ✅ | ✅ | filter applied in the app rather than in the query (a deliberate, explained choice) | — |
 | 2026-10-28 | Claude Code / Opus 5.5 | 4c–4e | ⏭ | ⏭ | ⏭ | not run: no relations / no MCP / no Draft & Public | — |
-| 2026-10-28 | Claude Code / Opus 5.5 | 5a sections (code + types) | ✅ | ✅ | ✅ | Cache Components + zero pages: an empty `generateStaticParams` fails the build; the agent invented a `_placeholder` slug, and `/` was cached as not-found for a day | `flotiq-sections`: say what to do before any page exists |
+| 2026-10-28 | Claude Code / Opus 5.5 | 5a sections (code + types) | ✅ | ✅ | ✅ | Cache Components + zero pages: an empty `generateStaticParams` fails the build; the agent invented a `_placeholder` slug, and `/` was cached as not-found for a day | `flotiq-sections`: say what to do before any page exists (fixed in c5794f4) |
 | 2026-10-28 | Claude Code / Opus 5.5 | 5b custom section | ⏭ | ⏭ | ⏭ | not run: no MCP | — |
 | 2026-10-28 | Claude Code / Opus 5.5 | 5c colors | ✅ | ✅ | ✅ | — | — |
 | 2026-10-28 | Claude Code / Opus 5.5 | 6 plugin | ✅ | ⚠️ | ⏸ | guessed the CTD API name `krok` (it's `step`) instead of checking; not loaded in the panel | `flotiq-plugins`: check the CTD's API name before using it |
