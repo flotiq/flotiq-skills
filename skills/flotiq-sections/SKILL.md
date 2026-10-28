@@ -23,7 +23,7 @@ Don't use them for **an app's own UI** (a quiz, a calculator, a dashboard, a for
 
 ## The section library's CLI
 
-The library is [`@flotiq/flotiq-sections-next`](https://www.npmjs.com/package/@flotiq/flotiq-sections-next) (2.0+; until 2.0 it was `@flotiq/flotiq-flowbite-next` with the `flotiq-flowbite` CLI): a CLI over a shadcn registry. It ships source files and content type definitions, not importable components — there is no `SectionRender` to import from the package.
+The library is [`@flotiq/flotiq-sections-next`](https://www.npmjs.com/package/@flotiq/flotiq-sections-next) (2.0+): a CLI over a shadcn registry. It ships source files and content type definitions, not importable components — there is no `SectionRender` to import from the package.
 
 The CLI reads `FLOTIQ_API_KEY` (read-only: compares CTDs, generates types) and `FLOTIQ_RW_API_KEY` (imports CTDs into the space) from the environment or `.env`; without them it prompts interactively.
 
@@ -42,7 +42,7 @@ npx -p @flotiq/flotiq-sections-next flotiq-sections add hero features footer --y
 
 ## First setup
 
-If the project has the library's setup skill (`.github/skills/flotiq-sections-setup/SKILL.md`, or `flotiq-flowbite-setup` in an app set up before 2.0), read that file and follow it for the first setup (agents that load skills from `.claude/skills/` won't find it on their own): it is interactive and walks the user through `flotiq-nextjs-setup` and Content Preview.
+If the project has the library's setup skill (`.github/skills/flotiq-sections-setup/SKILL.md`), read that file and follow it for the first setup (agents that load skills from `.claude/skills/` won't find it on their own): it is interactive and walks the user through `flotiq-nextjs-setup` and Content Preview.
 
 Otherwise, after `init`:
 
