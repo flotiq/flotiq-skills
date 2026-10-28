@@ -107,6 +107,20 @@ Copy any skill folder from `skills/` directly into your AI assistant's skills di
 | [`flotiq-typegen`](skills/flotiq-typegen/SKILL.md) | How do I generate and maintain TypeScript types? |
 | [`flotiq-plugins`](skills/flotiq-plugins/SKILL.md) | How do I build, configure, or publish a Flotiq UI plugin? |
 
+## Testing the skills
+
+[`TESTING.md`](TESTING.md) is a staged path for checking the skills in a real project: a real agent, a Flotiq test space and a Next.js app. Every stage checks that the right skill loads on its own, that the agent follows it, and that the result works. Results go in its log, and every failure becomes a fix in a `SKILL.md`.
+
+You can run it by hand, or hand it to an agent opened in this repository:
+
+```text
+Test the skills following TESTING.md. Set up stage 0, then run every stage you can as a separate
+headless agent session in the test project outside this repo, verify each result yourself, skip
+(and mark) what can't run, and record the results in the TESTING.md results log.
+```
+
+It needs a disposable Flotiq space (its keys in `.env`) and the [Flotiq MCP Server](https://mcp.flotiq.com/mcp) for the schema and content stages.
+
 ## Adding new skills
 
 The structure is deliberately flat and additive — a new skill is a new folder under `skills/` with its own `SKILL.md` and `references/`. Nothing about the existing skills needs to change to add:
