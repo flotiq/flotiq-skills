@@ -7,7 +7,7 @@ description: Use when populating a Flotiq project with Content Objects — creat
 
 Populate Flotiq projects with high-quality Content Objects: create, update, publish, relate, and attach media. Assumes the Content Types already exist. Not for schema design (`flotiq-schema`) or frontend/SDK work (`flotiq-sdk`).
 
-Primary tool: the Flotiq MCP server — `list_content_types`, `list_objects`, `get_object`, `create_object`, `update_object`, `publish_object`. See [`references/mcp-tools.md`](references/mcp-tools.md) for parameters and the publish/cascade behavior.
+Tools: Flotiq's MCP server — `data_efficient_list_ctd`, `get_content_type`, `list_objects`, `get_object`, `create_object`, `update_object`, `publish_object`. See [`references/content-tools.md`](references/content-tools.md) for parameters and the publish/cascade behavior.
 
 ## When to use
 
@@ -17,12 +17,14 @@ Primary tool: the Flotiq MCP server — `list_content_types`, `list_objects`, `g
 
 ## Workflow
 
-1. `list_content_types()` for the CTD and its ID; `list_objects()` to see what already exists — avoid duplicates, match existing tone.
+Pages built from sections: the section objects first, then the `page` objects that relate to them in order, published with `cascade` — see `flotiq-sections`.
+
+1. `data_efficient_list_ctd` to find the CTD name, `get_content_type` to read its fields; `list_objects` to see what already exists — avoid duplicates, match existing tone.
 2. Resolve or create related objects first, in dependency order (e.g. `Author` before `BlogPost`).
-3. Upload media separately, with alt text, via the Media API/panel — the MCP server has no upload tool — then reference the resulting ID.
-4. `create_object`/`update_object` with every required field populated and relations pointing at real objects, never placeholder IDs.
-5. `publish_object(..., cascade)` deliberately when Draft & Public is enabled — decide whether related drafts should publish too.
-6. `get_object()` to verify fields, relations, media, and publish state all match what was intended.
+3. Media: reference media objects that already exist in the space (`list_objects` on `_media`), upload a file you have (see [`references/media-and-alt-text.md`](references/media-and-alt-text.md)), or leave optional media fields empty and say in your report which objects need images.
+4. `create_object`/`update_object` with every required field populated and relations pointing at real objects, never placeholder IDs. Independent objects can go out in one batch of calls; an object that relates to others waits for them.
+5. `publish_object` (with `cascade` decided deliberately) when Draft & Public is enabled — the app reads published content only.
+6. `get_object` (or `list_objects` for a batch) to verify fields, relations, media, and publish state all match what was intended.
 7. For a batch of sample content, keep tone and level of detail consistent across every object.
 
 ## Best practices
@@ -40,21 +42,21 @@ Primary tool: the Flotiq MCP server — `list_content_types`, `list_objects`, `g
 * Relations left pointing at IDs that don't exist.
 * Missing or generic alt text; duplicate authors/categories created instead of reused.
 * Calling `publish_object` without checking Draft & Public is enabled, or forgetting `cascade`.
-* Assuming the MCP server can upload media directly — it can't.
+* Inventing media: without a file to upload, say which images are missing instead.
 
 ## Completion checklist
 
 * [ ] Schema was read before content was created; no accidental duplicate objects.
 * [ ] Required fields populated; relations point at real objects.
-* [ ] Media uploaded, attached, and has meaningful alt text.
+* [ ] Media fields point at existing media with meaningful alt text, or the missing images are named in the report.
 * [ ] Tone/style is consistent across the batch and with existing content.
 * [ ] Publish state matches intent, and the result was re-fetched to confirm it.
 
 ## References
 
-* [`references/mcp-tools.md`](references/mcp-tools.md) — the MCP server's tool set, parameters, and auth.
+* [`references/content-tools.md`](references/content-tools.md) — Flotiq's MCP content tools and their parameters.
 * [`references/content-quality.md`](references/content-quality.md) — writing realistic, consistent content.
-* [`references/media-and-alt-text.md`](references/media-and-alt-text.md) — media upload workflow and alt text.
+* [`references/media-and-alt-text.md`](references/media-and-alt-text.md) — relating and uploading media, and alt text.
 * [`references/relationships.md`](references/relationships.md) — wiring up object relationships.
 
 ## Official documentation

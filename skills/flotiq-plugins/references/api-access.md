@@ -1,29 +1,4 @@
-# Manifest, permissions, and API access
-
-## Manifest
-
-`plugin-manifest.json` describes the plugin and is typically also bundled/copied by the build. Keep these fields aligned with the implementation:
-
-* `id` — globally unique, stable; prefix with the organization/company name.
-* `name` — user-facing name.
-* `version` — semantic version used to identify updates.
-* `url` — full URL of the built JavaScript file.
-* `description`, `repository` — optional metadata that should stay accurate.
-* `permissions` — only the API capabilities the current implementation needs.
-
-The manifest has no event list — event handlers are registered in code.
-
-## Permissions
-
-Permission entries use `type: 'CO' | 'CTD'`, a `ctdName` (`'*'` means all), and operation flags. Use the API reference names as canonical: `canRead`, `canCreate`, `canUpdate`, `canDelete`. (One getting-started example also shows `canWrite` — don't infer its behavior; verify current support before using a field absent from the `PluginPermission` API reference.)
-
-Examples of least privilege:
-
-* Create imported `product` objects: `{ "type": "CO", "ctdName": "product", "canCreate": true }`.
-* Also read `product` objects before deduplicating: add `canRead: true` to that entry.
-* Read the `product` schema: a separate `{ "type": "CTD", "ctdName": "product", "canRead": true }` entry.
-
-Don't request wildcard access merely because it's convenient during development.
+# API access
 
 ## Provided plugin client
 
@@ -34,7 +9,7 @@ Use the dynamic methods on `client[ctdName]`:
 * `getContentType()`, `putContentType(object)`
 * top-level `getContentTypes(params)` and `getMediaUrl(mediaData, height, width)`
 
-The client enforces manifest permissions. Response shapes can vary between local code/examples (`{ body, ok }` wrappers) and parts of the generated API reference (resolved domain objects) — follow whatever shape the surrounding code already uses, confirm current behavior when adding a new method, and don't silently mix the two.
+The client enforces manifest permissions (see `references/manifest.md`). Response shapes can vary between local code/examples (`{ body, ok }` wrappers) and parts of the generated API reference (resolved domain objects) — follow whatever shape the surrounding code already uses, confirm current behavior when adding a new method, and don't silently mix the two.
 
 Cache stable or repeated read promises where useful (relation/media lookups) to avoid duplicate parallel requests.
 

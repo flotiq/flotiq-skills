@@ -6,13 +6,7 @@ This repository does **not** re-publish the [Flotiq documentation](https://floti
 
 Inspired by the architecture and philosophy of the [WordPress Agent Skills](https://github.com/WordPress/agent-skills) project.
 
-## Work in progress
-
-This repository is in Proof of concept state.
-
-See next steps:
-* [ ] Adjust catalog of flotiq skills
-* [ ] Use https://www.skills.sh to manage skills
+> **AI-generated content.** These skills were written with AI assistance and reviewed by the Flotiq team. They can still contain mistakes or fall behind the current API — when a skill and the [Flotiq documentation](https://flotiq.com/docs/) disagree, the documentation wins. Please report problems in [issues](https://github.com/flotiq/flotiq-skills/issues).
 
 ## Why Agent Skills
 
@@ -41,7 +35,7 @@ flotiq-agent-skills/
     ├── flotiq-sdk/        # Build applications on the official SDK
     │   ├── SKILL.md
     │   └── references/
-    ├── flotiq-ui-sections/ # Render Flowbite sections in Flotiq pages
+    ├── flotiq-sections/   # Build websites from Flotiq sections
     │   ├── SKILL.md
     │   └── references/
     ├── flotiq-typegen/    # Generate and maintain TypeScript types
@@ -109,16 +103,29 @@ Copy any skill folder from `skills/` directly into your AI assistant's skills di
 | [`flotiq-schema`](skills/flotiq-schema/SKILL.md) | How should I design or evolve this Content Type? |
 | [`flotiq-content`](skills/flotiq-content/SKILL.md) | How do I populate this project with good content? |
 | [`flotiq-sdk`](skills/flotiq-sdk/SKILL.md) | How do I build an app on top of Flotiq content? |
-| [`flotiq-ui-sections`](skills/flotiq-ui-sections/SKILL.md) | How do I render or customize Flotiq page sections? |
+| [`flotiq-sections`](skills/flotiq-sections/SKILL.md) | How do I build a website from Flotiq sections (library or my own)? |
 | [`flotiq-typegen`](skills/flotiq-typegen/SKILL.md) | How do I generate and maintain TypeScript types? |
 | [`flotiq-plugins`](skills/flotiq-plugins/SKILL.md) | How do I build, configure, or publish a Flotiq UI plugin? |
+
+## Testing the skills
+
+[`TESTING.md`](TESTING.md) is a staged path for checking the skills in a real project: a real agent, a Flotiq test space and a Next.js app. Every stage checks that the right skill loads on its own, that the agent follows it, and that the result works. Results go in its log, and every failure becomes a fix in a `SKILL.md`.
+
+You can run it by hand, or hand it to an agent opened in this repository:
+
+```text
+Test the skills following TESTING.md. Set up stage 0, then run every stage you can as a separate
+headless agent session in the test project outside this repo, verify each result yourself, skip
+(and mark) what can't run, and record the results in the TESTING.md results log.
+```
+
+It needs a disposable Flotiq space (its keys in `.env`) and the [Flotiq MCP Server](https://mcp.flotiq.com/mcp) for the schema and content stages.
 
 ## Adding new skills
 
 The structure is deliberately flat and additive — a new skill is a new folder under `skills/` with its own `SKILL.md` and `references/`. Nothing about the existing skills needs to change to add:
 
-* `flotiq-webhooks` — reacting to content changes
-* `flotiq-nextjs` — Next.js-specific integration patterns built on `flotiq-sdk`
+* `flotiq-webhooks` — reacting to content changes beyond Next.js revalidation (covered in `flotiq-sdk`)
 * `flotiq-media` — deeper media library / asset transformation workflows
 * `flotiq-ai` — AI-assisted content generation workflows
 
@@ -127,6 +134,6 @@ When proposing a new skill, keep it answering exactly one question, and check wh
 ## Official documentation
 
 * [Flotiq Documentation](https://flotiq.com/docs/)
-* [Flotiq MCP Server](https://mcp.flotiq.com/mcp)
+* [Flotiq MCP Server](https://mcp.flotiq.com/mcp) — content types and content objects (API key or OAuth)
 * [Next.js integration](https://flotiq.com/docs/Universe/nextjs/nextjs-setup)
-* Type generation: `npm exec flotiq-api-typegen`
+* Type generation: `npx flotiq-api-typegen` (ships with `@flotiq/flotiq-api-sdk`)

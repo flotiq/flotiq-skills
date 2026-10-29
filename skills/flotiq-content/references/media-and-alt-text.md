@@ -1,11 +1,11 @@
 # Media and alt text
 
-## Upload workflow
+## Media workflow
 
-1. Upload the file to the Media library first, via the Media API or the panel — the Flotiq MCP server has no upload tool, so this step happens outside MCP. Media is always uploaded as its own object, then related to content, never inlined.
-2. Set the media object's own metadata (title, alt text) at upload time rather than leaving it for later.
-3. Relate the uploaded media object's ID to the content object's media field (via `create_object`/`update_object` if you're using the MCP server for the content object itself), respecting whether that field allows a single asset or multiple (a gallery).
-4. Reuse existing media objects when the same asset applies to multiple content objects, instead of re-uploading duplicates — `list_objects` against the Media type can help find them.
+1. Flotiq's MCP server has no upload. A file you have (an image from a design export, say) goes into the Media library through the REST API: a multipart `POST https://api.flotiq.com/api/media` with `file` and `type` (`"image"`, or `"file"` for anything else, a video included) and the header `X-AUTH-TOKEN: <read-write key>`; the answer is the new `_media` object. Without the file, the Media library is filled in the Flotiq panel, where its title and alt text are set too.
+2. Relate existing media: find it with `list_objects` on `_media`, and put its reference in the content object's media field (`create_object`/`update_object`), respecting whether that field allows a single asset or multiple (a gallery).
+3. When the space has no fitting media, leave optional media fields empty, and say in your report which objects need which images. Don't invent placeholder URLs or point at unrelated assets.
+4. Reuse one media object across content objects when the same asset applies, rather than asking for duplicates.
 
 ## Writing alt text
 

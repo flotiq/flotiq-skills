@@ -1,11 +1,11 @@
 ---
 name: flotiq-plugins
-description: Use when building or extending a Flotiq UI plugin — choosing panel events, adding forms/settings, configuring manifest permissions and API access, or installing/publishing the plugin. Not for consuming Flotiq content in a frontend app (see flotiq-sdk) or rendering Flotiq page sections (see flotiq-ui-sections).
+description: Use when building or extending a Flotiq UI plugin — choosing panel events, adding forms/settings, configuring manifest permissions and API access, or installing/publishing the plugin. Not for consuming Flotiq content in a frontend app (see flotiq-sdk) or rendering Flotiq page sections (see flotiq-sections).
 ---
 
 # Flotiq Plugins
 
-Build UI plugins that extend the Flotiq panel: grid/form additions, custom renderers, settings screens, and API-backed actions. Use only documented event names and payload contracts, request least-privilege permissions, and keep credentials out of the bundle. Not for building an app that consumes Flotiq content (`flotiq-sdk`) or rendering CMS page sections in a frontend (`flotiq-ui-sections`).
+Build UI plugins that extend the Flotiq panel: grid/form additions, custom renderers, settings screens, and API-backed actions. Use only documented event names and payload contracts, request least-privilege permissions, and keep credentials out of the bundle. Not for building an app that consumes Flotiq content (`flotiq-sdk`) or rendering CMS page sections in a frontend (`flotiq-sections`).
 
 ## When to use
 
@@ -20,7 +20,7 @@ Build UI plugins that extend the Flotiq panel: grid/form additions, custom rende
 1. Identify the target CTD, UI placement, inputs, and any destructive behavior before writing code; ask when placement or destructive behavior is ambiguous.
 2. Pick the exact documented event for that placement (`references/events-and-ui.md`). Never invent a plausible-looking event name.
 3. If the feature involves a form, modal, settings screen, or credentials, read `references/forms-modals-and-settings.md` first — several of its shapes (settings schema, credential handling) fail in non-obvious ways if skipped.
-4. Plan data access with `references/manifest-and-api.md`: use the client's permission-checked methods, and request only the permissions the implementation actually needs.
+4. Plan data access: request only the permissions the implementation actually needs (`references/manifest.md`), then use the client's permission-checked methods (`references/api-access.md`).
 5. Implement the handler: return synchronously from `::render`/`::add`, return `null` outside the feature's scope, and follow the DOM attach/detach lifecycle for cleanup.
 6. Validate locally, then follow `references/installation.md` for temporary install and, if applicable, publishing.
 
@@ -45,7 +45,7 @@ Build UI plugins that extend the Flotiq panel: grid/form additions, custom rende
 
 * [ ] Every event used is a documented one, with a synchronous return from `::render`/`::add`.
 * [ ] Handlers return `null` for out-of-scope content types/fields/views.
-* [ ] `plugin-manifest.json` permissions match exactly what the implementation calls.
+* [ ] `plugin-manifest.json` describes the plugin, and permissions match exactly what the implementation calls.
 * [ ] No credential appears in source, `.env`, the manifest, or a bundled constant.
 * [ ] A settings schema, if any, has `allOf`, `metaDefinition.order`, and a `propertiesConfig` entry for every field in `order`.
 * [ ] The plugin was smoke-tested locally per `references/installation.md`.
@@ -54,7 +54,8 @@ Build UI plugins that extend the Flotiq panel: grid/form additions, custom rende
 
 * [`references/events-and-ui.md`](references/events-and-ui.md) — grid/form/settings events, render and lifecycle rules.
 * [`references/forms-modals-and-settings.md`](references/forms-modals-and-settings.md) — FormApi, schema modals, plugin settings, credential handling.
-* [`references/manifest-and-api.md`](references/manifest-and-api.md) — manifest permissions, the plugin API client, direct REST access.
+* [`references/manifest.md`](references/manifest.md) — `plugin-manifest.json` fields and least-privilege permissions.
+* [`references/api-access.md`](references/api-access.md) — the plugin API client, direct REST access, external APIs.
 * [`references/installation.md`](references/installation.md) — temporary install and publishing a plugin.
 
 ## Official documentation

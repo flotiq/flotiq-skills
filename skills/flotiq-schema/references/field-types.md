@@ -10,11 +10,13 @@ Quick reference for picking a field type when designing a Content Type Definitio
 | Number (integer or decimal) | Number | Set min/max where a negative or out-of-range value would be invalid. |
 | True/false toggle | Checkbox | Prefer this over a two-option select for genuine booleans. |
 | Fixed set of choices | Select / Radio | Use for enums an editor picks from (status, category tier) that don't need their own Content Type. |
-| Date or date+time | Datetime | Use for `publishedAt`, event dates, embargo dates. |
+| Date or date+time | Datetime | Use for `published_at`, event dates, embargo dates. |
 | Geographic coordinates | Geo | Use for location-based content (store locator, event venue). |
 | Link to another object of a known type | Relation | Always an array in the schema, even for a single related object — cap it with the field's multiplicity setting. |
 | Image / file / gallery | Media (relation to `_media`) | Configure `multiple` for single-asset vs. gallery fields. |
 | Email address | Email | Gets basic format validation for free. |
+| A list of short strings (tags, keywords) | Simple list (`simpleList`) | When the strings need no fields of their own and aren't shared; otherwise a relation. |
+| Repeated items with a few fields each (slides, FAQ entries, buttons) | List (`inputType: "object"`) | Items live inside the object, not as separate objects. Use it when the items belong to this one object only; things reused elsewhere get their own type and a relation. |
 
 ## Decision rules
 
